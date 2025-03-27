@@ -106,9 +106,10 @@
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{2025 NDMC Metagenome workshop}
-\author{\href{https://yinchengchen23.github.io/myCV/}{Yincheng Chen}}
-\date{Created on March 26, 2025}
+\title{\href{https://yinchengchen23.github.io/2025_Metagenome_workshop/}{2025
+NDMC Metagenome workshop}}
+\author{Yincheng Chen}
+\date{Created on March 28, 2025}
 
 \begin{document}
 \maketitle
@@ -463,8 +464,8 @@ the \texttt{PreLect} pipeline.
 \FunctionTok{DADA2Adapter}\NormalTok{(seqtab.nochim, taxa, output\_path) }\CommentTok{\# DADA2Adapter function is sourced from utils.R}
 \FunctionTok{dir}\NormalTok{(output\_path)}
 \DocumentationTok{\#\# [1] "ASV\_table.txt"      "ASV\_taxa\_table.txt" "ASV.fasta"         }
-\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "LEfSe\_tmp"         }
-\DocumentationTok{\#\# [7] "PICRUSt2"           "PreLect\_tmp"        "ssuout"}
+\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "PICRUSt2"          }
+\DocumentationTok{\#\# [7] "PreLect\_tmp"        "ssuout"}
 
 \CommentTok{\# load the data we need}
 \NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(output\_path,}\StringTok{\textquotesingle{}/ASV\_table.txt\textquotesingle{}}\NormalTok{), }\AttributeTok{sep =} \StringTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}t}\StringTok{\textquotesingle{}}\NormalTok{)}
@@ -551,8 +552,8 @@ the various alpha index to each sample.
 \begin{Highlighting}[]
 \FunctionTok{dir}\NormalTok{(output\_path)}
 \DocumentationTok{\#\# [1] "ASV\_table.txt"      "ASV\_taxa\_table.txt" "ASV.fasta"         }
-\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "LEfSe\_tmp"         }
-\DocumentationTok{\#\# [7] "PICRUSt2"           "PreLect\_tmp"        "ssuout"}
+\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "PICRUSt2"          }
+\DocumentationTok{\#\# [7] "PreLect\_tmp"        "ssuout"}
 
 \CommentTok{\# load the data we need}
 \NormalTok{tree }\OtherTok{\textless{}{-}} \FunctionTok{read.tree}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(output\_path,}\StringTok{\textquotesingle{}/ASV.tree\textquotesingle{}}\NormalTok{))}
@@ -1785,7 +1786,7 @@ PreLect execution and get the property for each feature
 \NormalTok{prevalence }\OtherTok{\textless{}{-}} \FunctionTok{GetPrevalence}\NormalTok{(data)}
 \NormalTok{PreLect\_out }\OtherTok{\textless{}{-}} \FunctionTok{PreLect}\NormalTok{(data\_scaled, prevalence, meta}\SpecialCharTok{$}\NormalTok{Class, }\AttributeTok{lambda=}\NormalTok{lmbd\_picking}\SpecialCharTok{$}\NormalTok{opt\_lmbd, }\AttributeTok{max\_iter =} \DecValTok{100000}\NormalTok{)}
 \FunctionTok{print}\NormalTok{(}\FunctionTok{Sys.time}\NormalTok{()}\SpecialCharTok{{-}}\NormalTok{s)}
-\DocumentationTok{\#\# Time difference of 3.083079 secs}
+\DocumentationTok{\#\# Time difference of 2.824755 secs}
 
 
 \NormalTok{featpropt }\OtherTok{\textless{}{-}} \FunctionTok{FeatureProperty}\NormalTok{(data, meta}\SpecialCharTok{$}\NormalTok{Class, PreLect\_out, }\AttributeTok{task=}\StringTok{"classification"}\NormalTok{)}
@@ -2150,12 +2151,12 @@ Selected the enriched KOs with z-score
 \DocumentationTok{\#\# [1] 630}
 \FunctionTok{head}\NormalTok{(Actived\_result)}
 \DocumentationTok{\#\#        KO        ES        z     p}
-\DocumentationTok{\#\# 1  K00121 0.3687500 2.066796 0.037}
-\DocumentationTok{\#\# 20 K07304 0.2955083 3.399557 0.002}
-\DocumentationTok{\#\# 35 K08296 0.4113924 2.298309 0.031}
-\DocumentationTok{\#\# 42 K06145 0.5015198 2.027432 0.031}
-\DocumentationTok{\#\# 43 K00567 0.2891499 3.072802 0.007}
-\DocumentationTok{\#\# 62 K00365 0.8173653 2.101814 0.032}
+\DocumentationTok{\#\# 10 K11392 0.5197568 2.016035 0.034}
+\DocumentationTok{\#\# 29 K07102 0.4521472 2.035035 0.033}
+\DocumentationTok{\#\# 64 K09160 0.4521472 2.097790 0.032}
+\DocumentationTok{\#\# 86 K18895 0.9760479 2.131169 0.005}
+\DocumentationTok{\#\# 93 K03799 0.2475731 2.475009 0.019}
+\DocumentationTok{\#\# 97 K01879 0.2366376 2.433231 0.019}
 \end{Highlighting}
 \end{Shaded}
 

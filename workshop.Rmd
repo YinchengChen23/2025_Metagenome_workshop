@@ -1,6 +1,6 @@
 ---
-title: "2025 NDMC Metagenome workshop"
-author: '[Yincheng Chen](https://yinchengchen23.github.io/myCV/)'
+title: "[2025 NDMC Metagenome workshop](https://yinchengchen23.github.io/2025_Metagenome_workshop/)"
+author: 'Yincheng Chen'
 date: "Created on March 28, 2025"
 output:
   html_document:
@@ -867,7 +867,7 @@ sample, using a uniform prior, performed CLR transformation of each
 realization, and then performed Wilcoxon tests on the transformed
 realizations.
 
-```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=F}
+```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=TRUE}
 library(ALDEx2)
 ALDEx2_result <- aldex(reads=data, conditions = meta$Class,
                        mc.samples = 128, test="t", effect=TRUE,
@@ -899,7 +899,7 @@ whereby a taxon was called as DA if the number of corrected p-values
 reaching nominal significance for that taxon was greater than 60% of the
 maximum possible number of significant comparisons.
 
-```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=F}
+```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=TRUE}
 library(compositions)
 library(exactRankTests)
 library(nlme)
@@ -947,7 +947,7 @@ features that differ between the specified groups. The resulting
 p-values were then corrected for multiple testing with the BH method
 with the function `topTags`.
 
-```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=F}
+```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=TRUE}
 library(edgeR)
 
 ASV <- phyloseq::otu_table(data, taxa_are_rows = T)
@@ -977,7 +977,7 @@ From these, only those features with scaled LDA analysis scores above
 the threshold score of 2.0 (default) were called as differentially
 abundant.
 
-```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=F}
+```{r, collapse=TRUE, message = TRUE, warning = FALSE, eval=TRUE}
 # file preparation
 ret_tab <- LEfSe_preparation(data, taxa, meta, "Class", pvl_filter = 0.05)
 head(ret_tab[,1:5])

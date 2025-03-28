@@ -744,6 +744,32 @@ ggplot() + geom_point(data = CCAscores, aes(x = CCA1, y = CCA2, color=group), al
           legend.title=element_text(size=10),legend.text=element_text(size=10))
 ```
 
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE, collapse=TRUE, eval=TRUE, fig.width=6, fig.height=4}
+
+wetland_taxa <- read.table("~/Course/NDMC_2025/data/wetland/ASV_taxa.csv", sep = ",", stringsAsFactors = F, header = T)
+finalmodel<- ordistep(CCA, scope=formula(CCA))
+CCAscores <- data.frame(scores(finalmodel, display = "sp"))
+CCAscores$sample <- rownames(wetland_rarefied)
+CCAscores$Family <- wetland_taxa$Family
+CCAscores <- CCAscores[CCAscores$Family %in% c('Desulfobacteraceae','Anaerolineaceae','Spirochaetaceae','Thioalkalispiraceae'),]
+cc <- data.frame(finalmodel$CCA$biplot)
+ggplot() +
+  geom_point(data = CCAscores, aes(x = CCA1, y = CCA2, color = Family)) +
+  geom_vline(xintercept = c(0), color = "grey70", linetype = 2) +
+  geom_hline(yintercept = c(0), color = "grey70", linetype = 2) +
+  geom_segment(data = cc, aes(x = 0, y = 0, xend = CCA1, yend = CCA2), arrow = arrow(length = unit(0.2, "cm"))) +
+  geom_text(data = cc, aes(x = CCA1, y = CCA2, label = rownames(cc))) +
+  theme_bw() + scale_color_brewer(palette = 'Set1') + 
+  labs(x = paste0("CCA1 (",round(CCA$CCA$eig[1] / CCA$tot.chi*100,2), "% var. explained)"),
+       y = paste0("CCA2 (",round(CCA$CCA$eig[2] / CCA$tot.chi*100,2), "% var. explained)"),
+       title = "Canonical Correspondence Analysis") +
+  theme(legend.text.align = 0, legend.title.align = 0,
+        legend.title=element_text(size=10),legend.text=element_text(size=10))
+```
+
+
+
 #### The arch effect in CCA
 
 ![](images/Fig11.png){width="70%"}
@@ -1417,6 +1443,12 @@ $ wget https://github.com/omixer/omixer-rpmR/releases/download/0.3.3/omixerRpm_0
 $ R CMD INSTALL omixerRpm_0.3.3.tar.gz
 ```
 
+```{r, eval=FALSE}
+# installation for window
+install.packages("C:/Users/USER/Desktop/omixerRpm_0.3.3.tar.gz", 
+                 repos = NULL, 
+                 type = "source")
+```
 <br/>
 
 #### Pathway mapping 
@@ -1674,7 +1706,8 @@ Our lab also developed a user friendly `bioBakery Workflows` named [`BacNex`](ht
 ```{base, eval=F}
 # Installation
 $ git clone https://github.com/RynoLiu/BacNex.git
-$ conda env create -f /env/bacnex_env_v2.yml --name bacnex_env
+$ cd BacNex
+$ conda env create -f env/bacnex_env_v2.yml --name bacnex_env
 $ conda activate bacnex_env
 
 # Build database

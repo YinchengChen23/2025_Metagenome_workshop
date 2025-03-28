@@ -464,8 +464,8 @@ the \texttt{PreLect} pipeline.
 \FunctionTok{DADA2Adapter}\NormalTok{(seqtab.nochim, taxa, output\_path) }\CommentTok{\# DADA2Adapter function is sourced from utils.R}
 \FunctionTok{dir}\NormalTok{(output\_path)}
 \DocumentationTok{\#\# [1] "ASV\_table.txt"      "ASV\_taxa\_table.txt" "ASV.fasta"         }
-\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "PICRUSt2"          }
-\DocumentationTok{\#\# [7] "PreLect\_tmp"        "ssuout"}
+\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "LEfSe\_tmp"         }
+\DocumentationTok{\#\# [7] "PICRUSt2"           "PreLect\_tmp"        "ssuout"}
 
 \CommentTok{\# load the data we need}
 \NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(output\_path,}\StringTok{\textquotesingle{}/ASV\_table.txt\textquotesingle{}}\NormalTok{), }\AttributeTok{sep =} \StringTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}t}\StringTok{\textquotesingle{}}\NormalTok{)}
@@ -552,8 +552,8 @@ the various alpha index to each sample.
 \begin{Highlighting}[]
 \FunctionTok{dir}\NormalTok{(output\_path)}
 \DocumentationTok{\#\# [1] "ASV\_table.txt"      "ASV\_taxa\_table.txt" "ASV.fasta"         }
-\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "PICRUSt2"          }
-\DocumentationTok{\#\# [7] "PreLect\_tmp"        "ssuout"}
+\DocumentationTok{\#\# [4] "ASV.tree"           "for\_PICRUSt2.tsv"   "LEfSe\_tmp"         }
+\DocumentationTok{\#\# [7] "PICRUSt2"           "PreLect\_tmp"        "ssuout"}
 
 \CommentTok{\# load the data we need}
 \NormalTok{tree }\OtherTok{\textless{}{-}} \FunctionTok{read.tree}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(output\_path,}\StringTok{\textquotesingle{}/ASV.tree\textquotesingle{}}\NormalTok{))}
@@ -1116,6 +1116,35 @@ unimodal responses to environmental gradients.
 
 \includegraphics{workshop_files/figure-latex/unnamed-chunk-30-1.pdf}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{wetland\_taxa }\OtherTok{\textless{}{-}} \FunctionTok{read.table}\NormalTok{(}\StringTok{"\textasciitilde{}/Course/NDMC\_2025/data/wetland/ASV\_taxa.csv"}\NormalTok{, }\AttributeTok{sep =} \StringTok{","}\NormalTok{, }\AttributeTok{stringsAsFactors =}\NormalTok{ F, }\AttributeTok{header =}\NormalTok{ T)}
+\NormalTok{finalmodel}\OtherTok{\textless{}{-}} \FunctionTok{ordistep}\NormalTok{(CCA, }\AttributeTok{scope=}\FunctionTok{formula}\NormalTok{(CCA))}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Start: t(wetland\_rarefied) \textasciitilde{} Na + Ca + Cl + EC + Salinity + pH}
+\NormalTok{CCAscores }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{scores}\NormalTok{(finalmodel, }\AttributeTok{display =} \StringTok{"sp"}\NormalTok{))}
+\NormalTok{CCAscores}\SpecialCharTok{$}\NormalTok{sample }\OtherTok{\textless{}{-}} \FunctionTok{rownames}\NormalTok{(wetland\_rarefied)}
+\NormalTok{CCAscores}\SpecialCharTok{$}\NormalTok{Family }\OtherTok{\textless{}{-}}\NormalTok{ wetland\_taxa}\SpecialCharTok{$}\NormalTok{Family}
+\NormalTok{CCAscores }\OtherTok{\textless{}{-}}\NormalTok{ CCAscores[CCAscores}\SpecialCharTok{$}\NormalTok{Family }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Desulfobacteraceae\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}Anaerolineaceae\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}Spirochaetaceae\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}Thioalkalispiraceae\textquotesingle{}}\NormalTok{),]}
+\NormalTok{cc }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(finalmodel}\SpecialCharTok{$}\NormalTok{CCA}\SpecialCharTok{$}\NormalTok{biplot)}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ CCAscores, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ CCA1, }\AttributeTok{y =}\NormalTok{ CCA2, }\AttributeTok{color =}\NormalTok{ Family)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{), }\AttributeTok{color =} \StringTok{"grey70"}\NormalTok{, }\AttributeTok{linetype =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{), }\AttributeTok{color =} \StringTok{"grey70"}\NormalTok{, }\AttributeTok{linetype =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_segment}\NormalTok{(}\AttributeTok{data =}\NormalTok{ cc, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \DecValTok{0}\NormalTok{, }\AttributeTok{y =} \DecValTok{0}\NormalTok{, }\AttributeTok{xend =}\NormalTok{ CCA1, }\AttributeTok{yend =}\NormalTok{ CCA2), }\AttributeTok{arrow =} \FunctionTok{arrow}\NormalTok{(}\AttributeTok{length =} \FunctionTok{unit}\NormalTok{(}\FloatTok{0.2}\NormalTok{, }\StringTok{"cm"}\NormalTok{))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\AttributeTok{data =}\NormalTok{ cc, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ CCA1, }\AttributeTok{y =}\NormalTok{ CCA2, }\AttributeTok{label =} \FunctionTok{rownames}\NormalTok{(cc))) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{scale\_color\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{\textquotesingle{}Set1\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"CCA1 ("}\NormalTok{,}\FunctionTok{round}\NormalTok{(CCA}\SpecialCharTok{$}\NormalTok{CCA}\SpecialCharTok{$}\NormalTok{eig[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{/}\NormalTok{ CCA}\SpecialCharTok{$}\NormalTok{tot.chi}\SpecialCharTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{), }\StringTok{"\% var. explained)"}\NormalTok{),}
+       \AttributeTok{y =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"CCA2 ("}\NormalTok{,}\FunctionTok{round}\NormalTok{(CCA}\SpecialCharTok{$}\NormalTok{CCA}\SpecialCharTok{$}\NormalTok{eig[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{/}\NormalTok{ CCA}\SpecialCharTok{$}\NormalTok{tot.chi}\SpecialCharTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{), }\StringTok{"\% var. explained)"}\NormalTok{),}
+       \AttributeTok{title =} \StringTok{"Canonical Correspondence Analysis"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.text.align =} \DecValTok{0}\NormalTok{, }\AttributeTok{legend.title.align =} \DecValTok{0}\NormalTok{,}
+        \AttributeTok{legend.title=}\FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=}\DecValTok{10}\NormalTok{),}\AttributeTok{legend.text=}\FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=}\DecValTok{10}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-31-1.pdf}
+
 \hypertarget{the-arch-effect-in-cca}{%
 \paragraph{The arch effect in CCA}\label{the-arch-effect-in-cca}}
 
@@ -1274,7 +1303,7 @@ is the better choice.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-33-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-34-1.pdf}
 
 \hypertarget{rda}{%
 \subsection{RDA}\label{rda}}
@@ -1335,7 +1364,7 @@ species data constrained by the environmental variables.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-35-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-36-1.pdf}
 
 \hypertarget{differential-taxa}{%
 \section{Differential Taxa}\label{differential-taxa}}
@@ -1767,7 +1796,7 @@ Determine the optimal lambda by partitioning tree.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-46-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-47-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1786,7 +1815,7 @@ PreLect execution and get the property for each feature
 \NormalTok{prevalence }\OtherTok{\textless{}{-}} \FunctionTok{GetPrevalence}\NormalTok{(data)}
 \NormalTok{PreLect\_out }\OtherTok{\textless{}{-}} \FunctionTok{PreLect}\NormalTok{(data\_scaled, prevalence, meta}\SpecialCharTok{$}\NormalTok{Class, }\AttributeTok{lambda=}\NormalTok{lmbd\_picking}\SpecialCharTok{$}\NormalTok{opt\_lmbd, }\AttributeTok{max\_iter =} \DecValTok{100000}\NormalTok{)}
 \FunctionTok{print}\NormalTok{(}\FunctionTok{Sys.time}\NormalTok{()}\SpecialCharTok{{-}}\NormalTok{s)}
-\DocumentationTok{\#\# Time difference of 2.824755 secs}
+\DocumentationTok{\#\# Time difference of 2.99019 secs}
 
 
 \NormalTok{featpropt }\OtherTok{\textless{}{-}} \FunctionTok{FeatureProperty}\NormalTok{(data, meta}\SpecialCharTok{$}\NormalTok{Class, PreLect\_out, }\AttributeTok{task=}\StringTok{"classification"}\NormalTok{)}
@@ -1828,7 +1857,7 @@ Selection profile visualization and evaluation
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-48-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-49-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1839,7 +1868,7 @@ Selection profile visualization and evaluation
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-48-2.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-49-2.pdf}
 
 \includegraphics[width=0.8\textwidth,height=\textheight]{images/Fig19.png}
 
@@ -1875,7 +1904,7 @@ universal across different datasets.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-50-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-51-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1960,7 +1989,7 @@ we use edgeR to demonstrate the several plots.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-51-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-52-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1975,7 +2004,7 @@ we use edgeR to demonstrate the several plots.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-51-2.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-52-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1990,7 +2019,7 @@ we use edgeR to demonstrate the several plots.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-51-3.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-52-3.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2005,7 +2034,7 @@ we use edgeR to demonstrate the several plots.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-51-4.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-52-4.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2020,7 +2049,7 @@ we use edgeR to demonstrate the several plots.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-51-5.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-52-5.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2035,7 +2064,7 @@ we use edgeR to demonstrate the several plots.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-51-6.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-52-6.pdf}
 
 \hypertarget{functional-prediction}{%
 \section{Functional Prediction}\label{functional-prediction}}
@@ -2151,12 +2180,12 @@ Selected the enriched KOs with z-score
 \DocumentationTok{\#\# [1] 630}
 \FunctionTok{head}\NormalTok{(Actived\_result)}
 \DocumentationTok{\#\#        KO        ES        z     p}
-\DocumentationTok{\#\# 10 K11392 0.5197568 2.016035 0.034}
-\DocumentationTok{\#\# 29 K07102 0.4521472 2.035035 0.033}
-\DocumentationTok{\#\# 64 K09160 0.4521472 2.097790 0.032}
-\DocumentationTok{\#\# 86 K18895 0.9760479 2.131169 0.005}
-\DocumentationTok{\#\# 93 K03799 0.2475731 2.475009 0.019}
-\DocumentationTok{\#\# 97 K01879 0.2366376 2.433231 0.019}
+\DocumentationTok{\#\# 1  K02415 0.3022222 2.092140 0.037}
+\DocumentationTok{\#\# 9  K07067 0.5423197 3.000060 0.006}
+\DocumentationTok{\#\# 11 K09154 0.8323353 2.352198 0.022}
+\DocumentationTok{\#\# 21 K00342 0.3318762 2.717256 0.013}
+\DocumentationTok{\#\# 36 K14415 0.4094937 2.272980 0.029}
+\DocumentationTok{\#\# 40 K01087 0.5552147 2.681651 0.013}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2236,7 +2265,7 @@ Examining the condition enriched pathway with Fisher's exact test via
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-58-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-59-1.pdf}
 
 \hypertarget{rpm}{%
 \subsection{RPM}\label{rpm}}
@@ -2283,6 +2312,15 @@ repository}
 \begin{Highlighting}[]
 \ExtensionTok{$}\NormalTok{ wget https://github.com/omixer/omixer{-}rpmR/releases/download/0.3.3/omixerRpm\_0.3.3.tar.gz}
 \ExtensionTok{$}\NormalTok{ R CMD INSTALL omixerRpm\_0.3.3.tar.gz}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# installation for window}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"C:/Users/USER/Desktop/omixerRpm\_0.3.3.tar.gz"}\NormalTok{, }
+                 \AttributeTok{repos =} \ConstantTok{NULL}\NormalTok{, }
+                 \AttributeTok{type =} \StringTok{"source"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2480,7 +2518,7 @@ Only binary grouping is supported in the following process.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{workshop_files/figure-latex/unnamed-chunk-62-1.pdf}
+\includegraphics{workshop_files/figure-latex/unnamed-chunk-64-1.pdf}
 
 \hypertarget{co-occurrence-network}{%
 \section{Co-Occurrence Network}\label{co-occurrence-network}}
@@ -2653,7 +2691,8 @@ named \href{https://github.com/RynoLiu/BacNex}{\texttt{BacNex}}
 \begin{Highlighting}[]
 \NormalTok{\# Installation}
 \NormalTok{$ git clone https://github.com/RynoLiu/BacNex.git}
-\NormalTok{$ conda env create {-}f /env/bacnex\_env\_v2.yml {-}{-}name bacnex\_env}
+\NormalTok{$ cd BacNex}
+\NormalTok{$ conda env create {-}f env/bacnex\_env\_v2.yml {-}{-}name bacnex\_env}
 \NormalTok{$ conda activate bacnex\_env}
 
 \NormalTok{\# Build database}
